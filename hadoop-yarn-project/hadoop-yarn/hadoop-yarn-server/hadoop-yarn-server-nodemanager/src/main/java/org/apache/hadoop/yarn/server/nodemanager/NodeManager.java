@@ -61,6 +61,7 @@ import org.apache.hadoop.yarn.server.api.records.AppCollectorData;
 import org.apache.hadoop.yarn.server.api.records.NodeHealthStatus;
 import org.apache.hadoop.yarn.server.nodemanager.containermanager.ContainerManager;
 import org.apache.hadoop.yarn.server.nodemanager.collectormanager.NMCollectorService;
+import org.apache.hadoop.yarn.server.api.records.OverAllocationInfo;
 import org.apache.hadoop.yarn.server.nodemanager.containermanager.ContainerManagerImpl;
 import org.apache.hadoop.yarn.server.nodemanager.containermanager.application.Application;
 import org.apache.hadoop.yarn.server.nodemanager.containermanager.application.ApplicationState;
@@ -563,6 +564,8 @@ public class NodeManager extends CompositeService
 
     private NMTimelinePublisher nmTimelinePublisher;
 
+    private OverAllocationInfo overAllocationInfo;
+
     public NMContext(NMContainerTokenSecretManager containerTokenSecretManager,
         NMTokenSecretManagerInNM nmTokenSecretManager,
         LocalDirsHandlerService dirsHandler, ApplicationACLsManager aclsManager,
@@ -708,6 +711,20 @@ public class NodeManager extends CompositeService
 
     public void setNodeStatusUpdater(NodeStatusUpdater nodeStatusUpdater) {
       this.nodeStatusUpdater = nodeStatusUpdater;
+    }
+
+    @Override
+    public boolean isOverAllocationEnabled() {
+      return getOverAllocationInfo() != null;
+    }
+
+    @Override
+    public OverAllocationInfo getOverAllocationInfo() {
+      return this.overAllocationInfo;
+    }
+
+    public void setOverAllocationInfo(OverAllocationInfo overAllocationInfo) {
+      this.overAllocationInfo = overAllocationInfo;
     }
 
     public boolean isDistributedSchedulingEnabled() {
