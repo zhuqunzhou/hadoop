@@ -244,4 +244,11 @@ public class DominantResourceCalculator extends ResourceCalculator {
   public boolean isAnyMajorResourceZero(Resource resource) {
     return resource.getMemorySize() == 0f || resource.getVirtualCores() == 0;
   }
+
+  @Override
+  public Resource normalizeDown(Resource r, Resource stepFactor) {
+    return Resources.createResource(
+        roundDown(r.getMemorySize(), stepFactor.getMemorySize()),
+        roundDown(r.getVirtualCores(), stepFactor.getVirtualCores()));
+  }
 }

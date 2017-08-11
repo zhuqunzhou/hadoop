@@ -37,21 +37,20 @@ import org.apache.hadoop.yarn.api.records.Priority;
 import org.apache.hadoop.yarn.api.records.QueueACL;
 import org.apache.hadoop.yarn.api.records.QueueState;
 import org.apache.hadoop.yarn.api.records.Resource;
-import org.apache.hadoop.yarn.exceptions.InvalidResourceRequestException;
 import org.apache.hadoop.yarn.security.PrivilegedEntity;
 import org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainer;
 import org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainerEventType;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.AbstractUsersManager;
+import org.apache.hadoop.yarn.server.resourcemanager.scheduler.QueueResourceQuotas;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.ResourceLimits;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.ResourceUsage;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.SchedulerApplicationAttempt;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.SchedulerQueue;
-import org.apache.hadoop.yarn.server.resourcemanager.scheduler.SchedContainerChangeRequest;
+import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.AbstractCSQueue.CapacityConfigType;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.common.ResourceCommitRequest;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.common.fica.FiCaSchedulerApp;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.common.fica.FiCaSchedulerNode;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.placement.PlacementSet;
-import org.apache.hadoop.yarn.server.resourcemanager.scheduler.placement.SimplePlacementSet;
 
 /**
  * <code>CSQueue</code> represents a node in the tree of 
@@ -357,4 +356,41 @@ public interface CSQueue extends SchedulerQueue<CSQueue> {
    * @return map of usernames and corresponding weight
    */
   Map<String, Float> getUserWeights();
+
+  /**
+   * Get QueueResourceQuotas associated with each queue.
+   * @return QueueResourceQuotas
+   */
+  public QueueResourceQuotas getQueueResourceQuotas();
+
+  /**
+   * Get CapacityConfigType as PERCENTAGE or ABSOLUTE_RESOURCE
+   * @return CapacityConfigType
+   */
+  public CapacityConfigType getCapacityConfigType();
+
+  /**
+   * Get effective capacity of queue. If min/max resource is configured,
+   * preference will be given to absolute configuration over normal capacity.
+   * Also round down the result to normalizeDown.
+   *
+   * @param label
+   *          partition
+   * @return effective queue capacity
+   */
+  Resource getEffectiveCapacity(String label);
+  Resource getEffectiveCapacityUp(String label);
+  Resource getEffectiveCapacityDown(String label, Resource factor);
+
+  /**
+   * Get effective max capacity of queue. If min/max resource is configured,
+   * preference will be given to absolute configuration over normal capacity.
+   * Also round down the result to normalizeDown.
+   *
+   * @param label
+   *          partition
+   * @return effective max queue capacity
+   */
+  Resource getEffectiveMaxCapacity(String label);
+  Resource getEffectiveMaxCapacityDown(String label, Resource factor);
 }
