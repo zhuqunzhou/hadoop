@@ -233,8 +233,8 @@ public class StoragePolicyAdmin extends Configured implements Tool {
   }
 
   /** Command to schedule blocks to move based on specified policy. */
-  private static class SatisfyStoragePolicyCommand implements
-      AdminHelper.Command {
+  private static class SatisfyStoragePolicyCommand
+      implements AdminHelper.Command {
     @Override
     public String getName() {
       return "-satisfyStoragePolicy";
@@ -278,10 +278,11 @@ public class StoragePolicyAdmin extends Configured implements Tool {
   }
 
   /** Command to check storage policy satisfier status. */
-  private static class IsSPSRunningCommand implements AdminHelper.Command {
+  private static class IsSatisfierRunningCommand
+      implements AdminHelper.Command {
     @Override
     public String getName() {
-      return "-isSPSRunning";
+      return "-isSatisfierRunning";
     }
 
     @Override
@@ -370,6 +371,6 @@ public class StoragePolicyAdmin extends Configured implements Tool {
       new GetStoragePolicyCommand(),
       new UnsetStoragePolicyCommand(),
       new SatisfyStoragePolicyCommand(),
-      new IsSPSRunningCommand()
+      new IsSatisfierRunningCommand()
   };
 }
