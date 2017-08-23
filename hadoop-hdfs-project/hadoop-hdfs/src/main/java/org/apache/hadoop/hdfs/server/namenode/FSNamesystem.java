@@ -1306,7 +1306,7 @@ public class FSNamesystem implements Namesystem, FSNamesystemMBean,
     writeLock();
     try {
       if (blockManager != null) {
-        blockManager.stopSPS(true);
+        blockManager.stopSPS(false);
       }
       stopSecretManager();
       leaseManager.stopMonitor();
